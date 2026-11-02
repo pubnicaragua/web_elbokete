@@ -1,0 +1,24 @@
+---
+import ServiceCard from '../components/ServiceCard.astro';
+import Base from '../layouts/Base.astro';
+import { experiences } from '../lib/api';
+
+const list = await experiences();
+---
+
+<Base title="Experiencias" description="Kayak, pádel, Day Pass y más experiencias en El Bokete.">
+  <section class="section container">
+    <h1>Experiencias</h1>
+    {
+      list.length === 0 ? (
+        <p class="notice">Pronto publicaremos nuestras experiencias.</p>
+      ) : (
+        <div class="grid">
+          {list.map((s) => (
+            <ServiceCard service={s} />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</Base>

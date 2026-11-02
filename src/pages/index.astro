@@ -1,0 +1,58 @@
+---
+import ServiceCard from '../components/ServiceCard.astro';
+import Base from '../layouts/Base.astro';
+import { experiences, rooms } from '../lib/api';
+
+const [roomList, experienceList] = await Promise.all([rooms(), experiences()]);
+---
+
+<Base title="El Bokete">
+  <section class="hero" role="img" aria-label="El Bokete, Hotel & Resort"></section>
+  <section class="intro container">
+    <p class="intro__kicker">NATURALEZA · CONFORT · EXCLUSIVIDAD</p>
+    <h1>Un refugio extraordinario en el corazón del Cocibolca</h1>
+    <p class="intro__lead">Hospedaje, restaurante y aventuras frente al lago, en un solo lugar.</p>
+    <a class="button button--gold" href="/habitaciones">Ver habitaciones →</a>
+  </section>
+
+  <section class="section container">
+    <h2>Nuestras habitaciones</h2>
+    <div class="grid">
+      {roomList.slice(0, 3).map((s) => <ServiceCard service={s} />)}
+    </div>
+    <p><a href="/habitaciones">Ver todas las habitaciones →</a></p>
+  </section>
+
+  <section class="section container">
+    <h2>Experiencias en el lago</h2>
+    <div class="grid">
+      {experienceList.slice(0, 3).map((s) => <ServiceCard service={s} />)}
+    </div>
+    <p><a href="/experiencias">Ver todas las experiencias →</a></p>
+  </section>
+</Base>
+
+<style>
+  /* La foto ya trae el logo: se muestra completa, sin texto encima. */
+  .hero {
+    min-height: min(70vh, 560px);
+    background: var(--ink) url('/brand/logo_cover.webp') center / cover no-repeat;
+  }
+  .intro {
+    padding-block: clamp(32px, 6vw, 72px) 0;
+  }
+  .intro__kicker {
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+    color: var(--copper);
+  }
+  .intro h1 {
+    max-width: 20ch;
+    color: var(--ink);
+  }
+  .intro__lead {
+    max-width: 48ch;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+</style>

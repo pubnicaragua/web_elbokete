@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'El Bokete, hotel y resort a orillas del Cocibolca, Nicaragua.' } = Astro.props;
+const fullTitle = title === 'El Bokete' ? title : `${title} · El Bokete`;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/brand/logo_cover.webp" />
+    <meta name="theme-color" content="#243226" />
+    <title>{fullTitle}</title>
+    <link rel="preload" href="/fonts/PlayfairDisplay-Variable.ttf" as="font" type="font/ttf" crossorigin />
+  </head>
+  <body>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <div class="container site-header__bar">
+        <a href="/" class="site-header__logo" aria-label="El Bokete, inicio">
+          <img src="/brand/logo_white.png" alt="El Bokete Hotel & Resort" width="150" height="49" />
+        </a>
+        <nav aria-label="Principal">
+          <a href="/habitaciones">Habitaciones</a>
+          <a href="/experiencias">Experiencias</a>
+        </nav>
+      </div>
+    </header>
+    <main id="contenido">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>El Bokete · Hotel &amp; Resort · A orillas del Cocibolca, Nicaragua</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  .skip {
+    position: absolute;
+    left: -999px;
+  }
+  .skip:focus {
+    left: 16px;
+    top: 16px;
+    z-index: 10;
+    background: var(--cream);
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  .site-header {
+    background: var(--deep-green);
+    color: var(--cream);
+  }
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 14px;
+  }
+  .site-header__logo img {
+    display: block;
+    height: 49px;
+    width: auto;
+  }
+  .site-header nav {
+    display: flex;
+    gap: 24px;
+  }
+  .site-header nav a {
+    text-decoration: none;
+    font-weight: 500;
+    padding: 12px 4px;
+  }
+  .site-header nav a:hover {
+    text-decoration: underline;
+  }
+  .site-footer {
+    background: var(--ink);
+    color: var(--cream);
+    padding-block: 32px;
+    font-size: 0.9rem;
+  }
+  .site-footer p {
+    margin: 0;
+  }
+</style>

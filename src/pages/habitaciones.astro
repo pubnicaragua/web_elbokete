@@ -1,0 +1,24 @@
+---
+import ServiceCard from '../components/ServiceCard.astro';
+import Base from '../layouts/Base.astro';
+import { rooms } from '../lib/api';
+
+const list = await rooms();
+---
+
+<Base title="Habitaciones" description="Habitaciones y suites de El Bokete frente al Cocibolca.">
+  <section class="section container">
+    <h1>Habitaciones</h1>
+    {
+      list.length === 0 ? (
+        <p class="notice">Pronto publicaremos nuestras habitaciones.</p>
+      ) : (
+        <div class="grid">
+          {list.map((s) => (
+            <ServiceCard service={s} />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</Base>

@@ -1,0 +1,177 @@
+/* Tipografías y colores de la marca (los mismos tokens que la app). */
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/PlayfairDisplay-Variable.ttf') format('truetype');
+  font-weight: 400 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/PlayfairDisplay-Italic-Variable.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --cream: #f9f6f0;
+  --ink: #111b17;
+  --deep-green: #243226;
+  --copper: #87563c;
+  --gold: #c9946a;
+  --sand: #f1eadd;
+  --border: #e6dfd1;
+  --muted: #6b6f68;
+  --radius: 16px;
+  --gutter: clamp(16px, 5vw, 48px);
+  --max: 1120px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Montserrat', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+}
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--copper);
+}
+h3 {
+  font-size: 1.35rem;
+  color: var(--copper);
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--max));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(40px, 7vw, 88px);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0 1.6em;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font-weight: 600;
+  text-decoration: none;
+}
+.button:hover {
+  background: var(--deep-green);
+}
+.button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+.button--gold {
+  background: linear-gradient(90deg, #b98456, #d9b488);
+  color: var(--ink);
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgb(17 27 23 / 8%);
+  overflow: hidden;
+  text-decoration: none;
+}
+.card__body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.card__price {
+  margin-top: auto;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.card__price small {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.tags li {
+  background: var(--sand);
+  border-radius: 999px;
+  padding: 2px 12px;
+  font-size: 0.8rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.notice {
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  background: #f6ebcb;
+  color: #8a6a1f;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card {
+    transition: transform 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+  }
+}

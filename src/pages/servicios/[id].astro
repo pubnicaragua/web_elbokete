@@ -1,0 +1,69 @@
+---
+import Base from '../../layouts/Base.astro';
+import { formatMoney, services, unitLabel, type Service } from '../../lib/api';
+
+// Una página por servicio publicado, generada al compilar.
+export async function getStaticPaths() {
+  const all = await services();
+  return all.map((service) => ({ params: { id: service.id }, props: { service } }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const priced = service.priceFrom.minorUnits > 0;
+---
+
+<Base title={service.name} description={service.description || undefined}>
+  <section class="section container detail">
+    <p><a href="/">← Inicio</a></p>
+    <h1>{service.name}</h1>
+    {service.imageUrls[0] && <img class="detail__photo" src={service.imageUrls[0]} alt={service.name} />}
+    {service.description && <p class="detail__lead">{service.description}</p>}
+    {
+      service.tags.length > 0 && (
+        <ul class="tags">
+          {service.tags.map((t) => (
+            <li>{t}</li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      service.rules.length > 0 && (
+        <>
+          <h2>Antes de reservar</h2>
+          <ul>
+            {service.rules.map((r) => (
+              <li>{r}</li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+    {
+      priced && (
+        <p class="card__price">
+          <small>Desde</small> {formatMoney(service.priceFrom)} <small>{unitLabel(service.priceUnit)}</small>
+        </p>
+      )
+    }
+    <p class="notice">Por ahora las reservas se hacen desde la app de El Bokete. Pronto también aquí.</p>
+  </section>
+</Base>
+
+<style>
+  .detail {
+    max-width: 760px;
+  }
+  .detail__photo {
+    width: 100%;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+  }
+  .detail__lead {
+    font-size: 1.1rem;
+  }
+</style>
