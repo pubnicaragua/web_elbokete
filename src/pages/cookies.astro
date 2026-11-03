@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+
+const analytics = Boolean(import.meta.env.PUBLIC_ANALYTICS_ID);
+---
+
+<Base title="Cookies" description="Qué cookies usa el sitio de El Bokete y cómo cambiar tu elección.">
+  <section class="section container prose">
+    <h1>Cookies</h1>
+    <p class="notice">Versión preliminar, pendiente de revisión legal.</p>
+    <p>
+      Una cookie es un archivo pequeño que el sitio guarda en tu navegador. Este sitio usa solo las que se listan aquí y
+      nada de analítica ni publicidad se activa sin que tú lo aceptes.
+    </p>
+    <table>
+      <thead>
+        <tr><th>Cookie</th><th>Para qué sirve</th><th>Tipo</th><th>Duración</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>bokete_consent</code></td>
+          <td>Recuerda si aceptaste o rechazaste la analítica.</td>
+          <td>Necesaria</td>
+          <td>6 meses</td>
+        </tr>
+        {
+          analytics && (
+            <tr>
+              <td><code>_ga</code>, <code>_ga_*</code></td>
+              <td>Google Analytics: cuenta visitas y páginas vistas de forma agregada.</td>
+              <td>Analítica (solo si la aceptas)</td>
+              <td>Hasta 2 años</td>
+            </tr>
+          )
+        }
+      </tbody>
+    </table>
+    {!analytics && <p>Hoy el sitio no usa cookies de analítica ni de publicidad.</p>}
+    <p>Puedes cambiar tu elección en cualquier momento desde «Preferencias de cookies» en el pie de página.</p>
+  </section>
+</Base>
+
+<style>
+  .prose {
+    max-width: 760px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block: 24px;
+    font-size: 0.9rem;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+</style>

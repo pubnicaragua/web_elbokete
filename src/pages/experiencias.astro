@@ -2,11 +2,16 @@
 import ServiceCard from '../components/ServiceCard.astro';
 import Base from '../layouts/Base.astro';
 import { experiences } from '../lib/api';
+import { breadcrumbJsonLd } from '../lib/seo';
 
 const list = await experiences();
 ---
 
-<Base title="Experiencias" description="Kayak, pádel, Day Pass y más experiencias en El Bokete.">
+<Base
+  title="Experiencias"
+  description="Kayak, pádel, Day Pass y más experiencias en El Bokete, a orillas del Cocibolca."
+  jsonLd={breadcrumbJsonLd([{ name: 'Inicio', path: '/' }, { name: 'Experiencias', path: '/experiencias' }], Astro.site!)}
+>
   <section class="section container">
     <h1>Experiencias</h1>
     {

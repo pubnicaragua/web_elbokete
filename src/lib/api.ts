@@ -43,7 +43,9 @@ async function get<T>(path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-export const services = () => get<Service[]>('/v1/services');
+// Al compilar, muchas páginas piden el catálogo: se pide una sola vez por compilación.
+let catalog: Promise<Service[]> | undefined;
+export const services = () => (catalog ??= get<Service[]>('/v1/services'));
 
 /** Los servicios que son habitaciones. */
 export const rooms = async () => (await services()).filter((s) => s.kind === 'room');

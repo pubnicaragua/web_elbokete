@@ -1,13 +1,31 @@
 ---
+import ConsentBanner from '../components/ConsentBanner.astro';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  /** Imagen para redes y buscadores (ruta del sitio o URL completa). */
+  image?: string;
+  /** Datos estructurados (schema.org) de la página, uno o varios. */
+  jsonLd?: object | object[];
+  /** Evita que buscadores indexen la página. */
+  noindex?: boolean;
 }
 
-const { title, description = 'El Bokete, hotel y resort a orillas del Cocibolca, Nicaragua.' } = Astro.props;
-const fullTitle = title === 'El Bokete' ? title : `${title} · El Bokete`;
+const {
+  title,
+  description = 'El Bokete, hotel y resort a orillas del Cocibolca, Nicaragua. Habitaciones, kayak, pádel, Day Pass y restaurante.',
+  image = '/brand/logo_cover.webp',
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title === 'El Bokete' ? 'El Bokete · Hotel & Resort en el Cocibolca, Nicaragua' : `${title} · El Bokete`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
+const analyticsId = import.meta.env.PUBLIC_ANALYTICS_ID as string | undefined;
+const blocks = jsonLd === undefined ? [] : Array.isArray(jsonLd) ? jsonLd : [jsonLd];
 ---
 
 <!doctype html>
@@ -15,13 +33,28 @@ const fullTitle = title === 'El Bokete' ? title : `${title} · El Bokete`;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+    <meta name="theme-color" content="#243226" />
+    <link rel="icon" href="/brand/logo_white.png" type="image/png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="El Bokete" />
+    <meta property="og:locale" content="es_NI" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/brand/logo_cover.webp" />
-    <meta name="theme-color" content="#243226" />
-    <title>{fullTitle}</title>
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
     <link rel="preload" href="/fonts/PlayfairDisplay-Variable.ttf" as="font" type="font/ttf" crossorigin />
+    {blocks.map((b) => <script type="application/ld+json" set:html={JSON.stringify(b)} />)}
   </head>
   <body>
     <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -40,10 +73,16 @@ const fullTitle = title === 'El Bokete' ? title : `${title} · El Bokete`;
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="container">
+      <div class="container site-footer__bar">
         <p>El Bokete · Hotel &amp; Resort · A orillas del Cocibolca, Nicaragua</p>
+        <nav aria-label="Legal">
+          <a href="/privacidad">Privacidad</a>
+          <a href="/cookies">Cookies</a>
+          {analyticsId && <button type="button" data-consent-open>Preferencias de cookies</button>}
+        </nav>
       </div>
     </footer>
+    {analyticsId && <ConsentBanner analyticsId={analyticsId} />}
   </body>
 </html>
 
@@ -94,7 +133,27 @@ const fullTitle = title === 'El Bokete' ? title : `${title} · El Bokete`;
     padding-block: 32px;
     font-size: 0.9rem;
   }
+  .site-footer__bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+  }
   .site-footer p {
     margin: 0;
+  }
+  .site-footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .site-footer nav button {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>

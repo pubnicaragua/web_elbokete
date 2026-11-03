@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { formatMoney, services, unitLabel, type Service } from '../../lib/api';
+import { breadcrumbJsonLd, serviceJsonLd } from '../../lib/seo';
 
 // Una página por servicio publicado, generada al compilar.
 export async function getStaticPaths() {
@@ -14,11 +15,29 @@ interface Props {
 
 const { service } = Astro.props;
 const priced = service.priceFrom.minorUnits > 0;
+const listPath = service.kind === 'room' ? '/habitaciones' : '/experiencias';
+const listName = service.kind === 'room' ? 'Habitaciones' : 'Experiencias';
+const jsonLd = [
+  serviceJsonLd(service, Astro.site!),
+  breadcrumbJsonLd(
+    [
+      { name: 'Inicio', path: '/' },
+      { name: listName, path: listPath },
+      { name: service.name, path: `/servicios/${service.id}` },
+    ],
+    Astro.site!,
+  ),
+];
 ---
 
-<Base title={service.name} description={service.description || undefined}>
+<Base
+  title={service.name}
+  description={service.description || undefined}
+  image={service.imageUrls[0]}
+  jsonLd={jsonLd}
+>
   <section class="section container detail">
-    <p><a href="/">← Inicio</a></p>
+    <p><a href={listPath}>← {listName}</a></p>
     <h1>{service.name}</h1>
     {service.imageUrls[0] && <img class="detail__photo" src={service.imageUrls[0]} alt={service.name} />}
     {service.description && <p class="detail__lead">{service.description}</p>}

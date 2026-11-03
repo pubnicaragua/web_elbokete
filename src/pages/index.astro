@@ -2,12 +2,22 @@
 import ServiceCard from '../components/ServiceCard.astro';
 import Base from '../layouts/Base.astro';
 import { experiences, rooms } from '../lib/api';
+import { hotelJsonLd } from '../lib/seo';
 
 const [roomList, experienceList] = await Promise.all([rooms(), experiences()]);
 ---
 
-<Base title="El Bokete">
-  <section class="hero" role="img" aria-label="El Bokete, Hotel & Resort"></section>
+<Base title="El Bokete" jsonLd={hotelJsonLd(Astro.site!)}>
+  <!-- La foto ya trae el logo: va completa, sin texto encima, y se pide con prioridad (es lo primero que se ve). -->
+  <img
+    class="hero"
+    src="/brand/logo_cover.webp"
+    alt="El Bokete, Hotel & Resort, de noche entre los árboles"
+    width="1042"
+    height="503"
+    fetchpriority="high"
+    decoding="async"
+  />
   <section class="intro container">
     <p class="intro__kicker">NATURALEZA · CONFORT · EXCLUSIVIDAD</p>
     <h1>Un refugio extraordinario en el corazón del Cocibolca</h1>
@@ -33,10 +43,12 @@ const [roomList, experienceList] = await Promise.all([rooms(), experiences()]);
 </Base>
 
 <style>
-  /* La foto ya trae el logo: se muestra completa, sin texto encima. */
   .hero {
-    min-height: min(70vh, 560px);
-    background: var(--ink) url('/brand/logo_cover.webp') center / cover no-repeat;
+    display: block;
+    width: 100%;
+    height: min(70vh, 560px);
+    object-fit: cover;
+    background: var(--ink);
   }
   .intro {
     padding-block: clamp(32px, 6vw, 72px) 0;
